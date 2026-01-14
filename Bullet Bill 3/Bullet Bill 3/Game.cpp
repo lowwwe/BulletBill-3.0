@@ -83,6 +83,14 @@ void Game::processEvents()
 		{
 			processMouseDown(newEvent);
 		}
+		if (newEvent->is<sf::Event::MouseMoved>())
+		{
+			processMouseMove(newEvent);
+		}
+		if (newEvent->is<sf::Event::MouseButtonReleased>())
+		{
+			procsesMouseRelease(newEvent);
+		}
 	}
 }
 
@@ -116,6 +124,26 @@ void Game::processMouseDown(const std::optional<sf::Event> t_event)
 		setAimLine();
 	}
 
+}
+
+void Game::processMouseMove(const std::optional<sf::Event> t_event)
+{
+	if (m_aiming)
+	{
+		const sf::Event::MouseMoved* newMouseMove = t_event->getIf < sf::Event::MouseMoved>();
+
+		m_mouseEnd.x = static_cast<float>(newMouseMove->position.x);
+		m_mouseEnd.y = static_cast<float>(newMouseMove->position.y);
+		setAimLine();
+	}
+
+}
+
+void Game::procsesMouseRelease(const std::optional<sf::Event> t_event)
+{
+	const sf::Event::MouseButtonReleased* newMouseRelease = t_event->getIf<sf::Event::MouseButtonReleased>();
+
+	m_aiming = false;
 }
 
 /// <summary>
@@ -221,6 +249,14 @@ void Game::animateGumba()
 void Game::setAimLine()
 {
 	sf::Vertex point;
+	float radians = 0.0f;
+	sf::Vector2f line;
+
+	line = m_mouseEnd - m_canonEnd;
+	radians = std::atan2f(line.y, line.x);
+	m_canon.setRotation(sf::radians(radians + 1.57f));
+
+
 	point.color = sf::Color::Black;
 	m_aimLine.clear();
 	point.position = m_mouseEnd;

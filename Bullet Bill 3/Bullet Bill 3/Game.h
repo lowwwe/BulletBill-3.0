@@ -34,6 +34,8 @@ private:
 	void processEvents();
 	void processKeys(const std::optional<sf::Event> t_event);
 	void processMouseDown(const std::optional<sf::Event>t_event);
+	void processMouseMove(const std::optional<sf::Event>t_event);
+	void procsesMouseRelease(const std::optional<sf::Event>t_event);
 	void checkKeyboardState();
 	void update(sf::Time t_deltaTime);
 	void render();
