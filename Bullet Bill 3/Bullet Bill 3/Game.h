@@ -63,12 +63,18 @@ private:
 	float m_gumbaFrameCount{ 0.0f };
 	float m_gumbaFrameIncrement{0.3f};
 
+	sf::Texture m_bgTexure;
+	sf::Sprite m_bgSprite{ m_bgTexure };
+	sf::Texture m_wallTexture;
+	sf::Sprite m_wallSprite{ m_wallTexture };
 
 
 	sf::SoundBuffer m_DELETEsoundBuffer; // buffer for beep sound
 	sf::Sound m_DELETEsound{ m_DELETEsoundBuffer }; // sound object to play
 	bool m_DELETEexitGame; // control exiting game
 
+
+	bool m_graphics{ false };
 };
 
 #pragma warning( pop ) 

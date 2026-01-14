@@ -94,6 +94,10 @@ void Game::processKeys(const std::optional<sf::Event> t_event)
 	{
 		m_DELETEexitGame = true; 
 	}
+	if (sf::Keyboard::Key::F1 == newKeypress->code)
+	{
+		m_graphics = !m_graphics;
+	}
 }
 
 /// <summary>
@@ -129,10 +133,17 @@ void Game::render()
 {
 	m_window.clear(sf::Color::White);
 
-	m_window.draw(m_wall);
-	m_window.draw(m_target);
-	m_window.draw(m_targetSprite);
-	m_window.draw(m_DELETEwelcomeMessage);
+	if (m_graphics)
+	{
+		m_window.draw(m_bgSprite);
+		m_window.draw(m_wallSprite);
+		m_window.draw(m_targetSprite);
+	}
+	else
+	{
+		m_window.draw(m_wall);
+		m_window.draw(m_target);
+	}
 	
 	m_window.display();
 }
@@ -159,6 +170,8 @@ void Game::moveTarget()
 	m_targetLocation += m_targetVelocity;
 	m_target.setPosition(m_targetLocation);
 	m_targetSprite.setPosition(m_targetLocation);
+
+
 }
 
 void Game::animateGumba()
@@ -223,6 +236,20 @@ void Game::setupSprites()
 	m_targetSprite.setTexture(m_gumbaTexture,true);
 	m_targetSprite.setTextureRect(sf::IntRect{ sf::Vector2i{0,0}, sf::Vector2i{52,54} });
 
+	if (!m_bgTexure.loadFromFile("assets/images/background.jpg"))
+	{
+		std::cout << "problem with the backgrouind";
+	}
+	m_bgSprite.setTexture(m_bgTexure, true);
+	m_bgSprite.setPosition(sf::Vector2f{ 0.0f,0.0f });
+
+	if (!m_wallTexture.loadFromFile("assets/images/wall.jpg"))
+	{
+		std::cout << "problem with wall";
+	}
+	m_wallTexture.setRepeated(true);
+	m_wallSprite.setPosition(sf::Vector2f{ 400.0f,500.0f });
+	m_wallSprite.setTextureRect(sf::IntRect{sf::Vector2i{0,0},sf::Vector2i{32,100}});
 }
 
 /// <summary>
