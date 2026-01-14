@@ -38,12 +38,14 @@ private:
 	void render();
 
 	void moveTarget();
-	
+	void animateGumba();
+
+
 	void setupTexts();
 	void setupSprites();
 	void setupAudio();
 
-	
+
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_jerseyFont;// font used by message
 
@@ -55,7 +57,13 @@ private:
 	sf::Text m_DELETEwelcomeMessage{ m_jerseyFont }; // text used for message on screen
 
 	sf::Texture m_gumbaTexture;// gumba texture
-	sf::Sprite m_targetSprite{m_gumbaTexture};// gumba sprite
+	sf::Sprite m_targetSprite{ m_gumbaTexture };// gumba sprite
+	int m_gumbaFrame{ 0 };
+	const int GUMBE_FRAMES = 19;
+	float m_gumbaFrameCount{ 0.0f };
+	float m_gumbaFrameIncrement{0.3f};
+
+
 
 	sf::SoundBuffer m_DELETEsoundBuffer; // buffer for beep sound
 	sf::Sound m_DELETEsound{ m_DELETEsoundBuffer }; // sound object to play

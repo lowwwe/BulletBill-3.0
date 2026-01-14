@@ -23,7 +23,7 @@ Game::Game() :
 	setupTexts(); // load font 
 	setupSprites(); // load texture
 	setupAudio(); // load sounds
-	m_targetVelocity = sf::Vector2f{ 0.6f,0.0f };
+	m_targetVelocity = sf::Vector2f{ -0.6f,0.0f };
 }
 
 /// <summary>
@@ -119,6 +119,7 @@ void Game::update(sf::Time t_deltaTime)
 		m_window.close();
 	}
 	moveTarget();
+	animateGumba();
 }
 
 /// <summary>
@@ -145,15 +146,40 @@ void Game::moveTarget()
 	if (m_targetLocation.x < LEFT_EDGE)
 	{
 		m_targetVelocity.x = SPEED ;
+		m_targetSprite.setScale(sf::Vector2f{ -1.0f,1.0f });
+		m_targetSprite.setOrigin(sf::Vector2f{ 52.0f,0.0f });
 	}
 	if (m_targetLocation.x > RIGHT_EDGE)
 	{
 		m_targetVelocity.x = -SPEED;
+		m_targetSprite.setScale(sf::Vector2f{ 1.0f,1.0f });
+		m_targetSprite.setOrigin(sf::Vector2f{ 0.0f,0.0f });
 	}
 
 	m_targetLocation += m_targetVelocity;
 	m_target.setPosition(m_targetLocation);
 	m_targetSprite.setPosition(m_targetLocation);
+}
+
+void Game::animateGumba()
+{
+	int frame = 0;
+	const int FRAME_WIDTH = 52;
+	const int FRAME_HEIGHT = 54;
+
+	m_gumbaFrameCount += m_gumbaFrameIncrement;
+	frame = static_cast<int>(m_gumbaFrameCount);
+	if (frame > GUMBE_FRAMES)
+	{
+		frame = 0;
+		m_gumbaFrameCount -= 20.0f;
+	}
+	if (frame != m_gumbaFrame)
+	{
+		m_gumbaFrame = frame;
+		m_targetSprite.setTextureRect(sf::IntRect{sf::Vector2i{FRAME_WIDTH*frame,0}, sf::Vector2i{FRAME_WIDTH,FRAME_HEIGHT}});
+	}
+
 }
 
 /// <summary>
@@ -194,8 +220,8 @@ void Game::setupSprites()
 		std::cout << "problem with gumba" << std::endl;
 	}
 
-	m_targetSprite.setTexture(m_gumbaTexture);
-	//m_targetSprite.setTextureRect(sf::IntRect{ sf::Vector2i{0,0}, sf::Vector2i{52,54} });
+	m_targetSprite.setTexture(m_gumbaTexture,true);
+	m_targetSprite.setTextureRect(sf::IntRect{ sf::Vector2i{0,0}, sf::Vector2i{52,54} });
 
 }
 
