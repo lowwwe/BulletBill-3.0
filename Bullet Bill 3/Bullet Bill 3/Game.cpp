@@ -124,9 +124,9 @@ void Game::update(sf::Time t_deltaTime)
 /// </summary>
 void Game::render()
 {
-	m_window.clear(ULTRAMARINE);
+	m_window.clear(sf::Color::White);
 
-	m_window.draw(m_DELETElogoSprite);
+	m_window.draw(m_wall);
 	m_window.draw(m_DELETEwelcomeMessage);
 	
 	m_window.display();
@@ -156,14 +156,9 @@ void Game::setupTexts()
 /// </summary>
 void Game::setupSprites()
 {
-	if (!m_DELETElogoTexture.loadFromFile("ASSETS\\IMAGES\\SFML-LOGO.png"))
-	{
-		// simple error message if previous call fails
-		std::cout << "problem loading logo" << std::endl;
-	}
-	
-	m_DELETElogoSprite.setTexture(m_DELETElogoTexture,true);// to reset the dimensions of texture
-	m_DELETElogoSprite.setPosition(sf::Vector2f{ 150.0f, 50.0f });
+	m_wall.setFillColor(sf::Color::Black);
+	m_wall.setSize(sf::Vector2f{ 32.0f,100.0f });
+	m_wall.setPosition(sf::Vector2f{ 400.0f, 500.0f });
 }
 
 /// <summary>
@@ -175,5 +170,5 @@ void Game::setupAudio()
 	{
 		std::cout << "Error loading beep sound" << std::endl;
 	}
-	m_DELETEsound.play(); // test sound
+	
 }
