@@ -33,12 +33,15 @@ private:
 
 	void processEvents();
 	void processKeys(const std::optional<sf::Event> t_event);
+	void processMouseDown(const std::optional<sf::Event>t_event);
 	void checkKeyboardState();
 	void update(sf::Time t_deltaTime);
 	void render();
 
 	void moveTarget();
 	void animateGumba();
+
+	void setAimLine();
 
 
 	void setupTexts();
@@ -51,6 +54,7 @@ private:
 
 	sf::RectangleShape m_wall; // block for wall
 	sf::RectangleShape m_target;// simple target
+	sf::RectangleShape m_canon;
 	sf::Vector2f m_targetLocation; // location of target
 	sf::Vector2f m_targetVelocity; // velocity of target
 
@@ -68,6 +72,11 @@ private:
 	sf::Texture m_wallTexture;
 	sf::Sprite m_wallSprite{ m_wallTexture };
 
+	sf::Vector2f m_mouseEnd;
+	sf::Vector2f m_canonEnd{ 100.0f,550.0f };
+
+	sf::VertexArray m_aimLine{ sf::PrimitiveType::Lines };
+	bool m_aiming{ false };
 
 	sf::SoundBuffer m_DELETEsoundBuffer; // buffer for beep sound
 	sf::Sound m_DELETEsound{ m_DELETEsoundBuffer }; // sound object to play

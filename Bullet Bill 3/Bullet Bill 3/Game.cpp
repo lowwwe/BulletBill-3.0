@@ -79,6 +79,10 @@ void Game::processEvents()
 		{
 			processKeys(newEvent);
 		}
+		if (newEvent->is < sf::Event::MouseButtonPressed>())
+		{
+			processMouseDown(newEvent);
+		}
 	}
 }
 
@@ -98,6 +102,20 @@ void Game::processKeys(const std::optional<sf::Event> t_event)
 	{
 		m_graphics = !m_graphics;
 	}
+}
+
+void Game::processMouseDown(const std::optional<sf::Event> t_event)
+{
+	const sf::Event::MouseButtonPressed* newMousePress = t_event->getIf<sf::Event::MouseButtonPressed>();
+
+	if (!m_aiming)
+	{
+		m_mouseEnd.x =  static_cast<float>( newMousePress->position.x);
+		m_mouseEnd.y = static_cast<float>(newMousePress->position.y);
+		m_aiming = true;
+		setAimLine();
+	}
+
 }
 
 /// <summary>
@@ -143,8 +161,13 @@ void Game::render()
 	{
 		m_window.draw(m_wall);
 		m_window.draw(m_target);
+		m_window.draw(m_canon);
 	}
 	
+	if (m_aiming)
+	{
+		m_window.draw(m_aimLine);
+	}
 	m_window.display();
 }
 
@@ -195,6 +218,17 @@ void Game::animateGumba()
 
 }
 
+void Game::setAimLine()
+{
+	sf::Vertex point;
+	point.color = sf::Color::Black;
+	m_aimLine.clear();
+	point.position = m_mouseEnd;
+	m_aimLine.append(point);
+	point.position = m_canonEnd;
+	m_aimLine.append(point);
+}
+
 /// <summary>
 /// load the font and setup the text message for screen
 /// </summary>
@@ -227,6 +261,14 @@ void Game::setupSprites()
 	m_target.setSize(sf::Vector2f{ 55.0f,55.0f });
 	m_targetLocation = sf::Vector2f{ 432.0f,545.0f };
 	m_target.setPosition(m_targetLocation);
+
+	m_canon.setFillColor(sf::Color::Black);
+	m_canon.setSize(sf::Vector2f{ 20.0f,70.0f });
+	m_canon.setPosition(sf::Vector2f{ 100.0f,550.0f });
+	m_canon.setOrigin(sf::Vector2f{ 10.0f,35.0f });
+	m_canon.setRotation(sf::degrees(45.0));
+
+
 
 	if (!m_gumbaTexture.loadFromFile("assets/images/gumba.png"))
 	{
