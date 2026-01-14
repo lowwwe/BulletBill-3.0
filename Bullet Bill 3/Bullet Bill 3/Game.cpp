@@ -23,6 +23,7 @@ Game::Game() :
 	setupTexts(); // load font 
 	setupSprites(); // load texture
 	setupAudio(); // load sounds
+	m_targetVelocity = sf::Vector2f{ 0.6f,0.0f };
 }
 
 /// <summary>
@@ -117,6 +118,7 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		m_window.close();
 	}
+	moveTarget();
 }
 
 /// <summary>
@@ -131,6 +133,25 @@ void Game::render()
 	m_window.draw(m_DELETEwelcomeMessage);
 	
 	m_window.display();
+}
+
+void Game::moveTarget()
+{
+	const float SPEED = 0.6f;
+	const float LEFT_EDGE = 432.0f;
+	const float RIGHT_EDGE = 745.0f;
+
+	if (m_targetLocation.x < LEFT_EDGE)
+	{
+		m_targetVelocity.x = SPEED / 2.0f;
+	}
+	if (m_targetLocation.x > RIGHT_EDGE)
+	{
+		m_targetVelocity.x = -SPEED*3.0f;
+	}
+
+	m_targetLocation += m_targetVelocity;
+	m_target.setPosition(m_targetLocation);
 }
 
 /// <summary>

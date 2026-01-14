@@ -36,6 +36,8 @@ private:
 	void checkKeyboardState();
 	void update(sf::Time t_deltaTime);
 	void render();
+
+	void moveTarget();
 	
 	void setupTexts();
 	void setupSprites();
@@ -47,8 +49,8 @@ private:
 
 	sf::RectangleShape m_wall; // block for wall
 	sf::RectangleShape m_target;// simple target
-	sf::Vector2f m_targetLocation;
-
+	sf::Vector2f m_targetLocation; // location of target
+	sf::Vector2f m_targetVelocity; // velocity of target
 
 	sf::Text m_DELETEwelcomeMessage{ m_jerseyFont }; // text used for message on screen
 
