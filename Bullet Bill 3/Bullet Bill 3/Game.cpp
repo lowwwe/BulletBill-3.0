@@ -130,6 +130,7 @@ void Game::render()
 
 	m_window.draw(m_wall);
 	m_window.draw(m_target);
+	m_window.draw(m_targetSprite);
 	m_window.draw(m_DELETEwelcomeMessage);
 	
 	m_window.display();
@@ -143,15 +144,16 @@ void Game::moveTarget()
 
 	if (m_targetLocation.x < LEFT_EDGE)
 	{
-		m_targetVelocity.x = SPEED / 2.0f;
+		m_targetVelocity.x = SPEED ;
 	}
 	if (m_targetLocation.x > RIGHT_EDGE)
 	{
-		m_targetVelocity.x = -SPEED*3.0f;
+		m_targetVelocity.x = -SPEED;
 	}
 
 	m_targetLocation += m_targetVelocity;
 	m_target.setPosition(m_targetLocation);
+	m_targetSprite.setPosition(m_targetLocation);
 }
 
 /// <summary>
@@ -186,6 +188,14 @@ void Game::setupSprites()
 	m_target.setSize(sf::Vector2f{ 55.0f,55.0f });
 	m_targetLocation = sf::Vector2f{ 432.0f,545.0f };
 	m_target.setPosition(m_targetLocation);
+
+	if (!m_gumbaTexture.loadFromFile("assets/images/gumba.png"))
+	{
+		std::cout << "problem with gumba" << std::endl;
+	}
+
+	m_targetSprite.setTexture(m_gumbaTexture);
+	//m_targetSprite.setTextureRect(sf::IntRect{ sf::Vector2i{0,0}, sf::Vector2i{52,54} });
 
 }
 

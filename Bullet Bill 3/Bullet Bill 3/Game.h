@@ -54,7 +54,9 @@ private:
 
 	sf::Text m_DELETEwelcomeMessage{ m_jerseyFont }; // text used for message on screen
 
-	
+	sf::Texture m_gumbaTexture;// gumba texture
+	sf::Sprite m_targetSprite{m_gumbaTexture};// gumba sprite
+
 	sf::SoundBuffer m_DELETEsoundBuffer; // buffer for beep sound
 	sf::Sound m_DELETEsound{ m_DELETEsoundBuffer }; // sound object to play
 	bool m_DELETEexitGame; // control exiting game
