@@ -46,7 +46,10 @@ private:
 	sf::Font m_jerseyFont;// font used by message
 
 	sf::RectangleShape m_wall; // block for wall
-	
+	sf::RectangleShape m_target;// simple target
+	sf::Vector2f m_targetLocation;
+
+
 	sf::Text m_DELETEwelcomeMessage{ m_jerseyFont }; // text used for message on screen
 
 	
