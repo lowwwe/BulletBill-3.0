@@ -59,6 +59,10 @@ private:
 	sf::RectangleShape m_canon;
 	sf::Vector2f m_targetLocation; // location of target
 	sf::Vector2f m_targetVelocity; // velocity of target
+	sf::CircleShape m_ball;// canon ball
+	sf::Vector2f m_ballLocation;// ball position
+	sf::Vector2f m_ballVelocity;// ball velocity
+
 
 	sf::Text m_DELETEwelcomeMessage{ m_jerseyFont }; // text used for message on screen
 

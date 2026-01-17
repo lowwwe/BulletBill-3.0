@@ -190,6 +190,7 @@ void Game::render()
 		m_window.draw(m_wall);
 		m_window.draw(m_target);
 		m_window.draw(m_canon);
+		m_window.draw(m_ball);
 	}
 	
 	if (m_aiming)
@@ -304,7 +305,10 @@ void Game::setupSprites()
 	m_canon.setOrigin(sf::Vector2f{ 10.0f,35.0f });
 	m_canon.setRotation(sf::degrees(45.0));
 
-
+	m_ball.setFillColor(sf::Color::Red);
+	m_ball.setRadius(10.0f);
+	m_ball.setPosition(sf::Vector2f{ 100.0f, 550.0f });
+	m_ball.setOrigin(sf::Vector2f{ 10.0f,10.0f });
 
 	if (!m_gumbaTexture.loadFromFile("assets/images/gumba.png"))
 	{
