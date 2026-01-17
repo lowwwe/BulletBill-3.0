@@ -41,7 +41,9 @@ private:
 	void render();
 
 	void moveTarget();
+	void moveBall();
 	void animateGumba();
+
 
 	void setAimLine();
 
@@ -82,7 +84,8 @@ private:
 	sf::Vector2f m_canonEnd{ 100.0f,550.0f };
 
 	sf::VertexArray m_aimLine{ sf::PrimitiveType::Lines };
-	bool m_aiming{ false };
+	bool m_aiming{ false }; // we are aiming
+	bool m_firing{ false };// we are firing
 
 	sf::SoundBuffer m_DELETEsoundBuffer; // buffer for beep sound
 	sf::Sound m_DELETEsound{ m_DELETEsoundBuffer }; // sound object to play

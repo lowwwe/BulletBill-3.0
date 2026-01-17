@@ -116,7 +116,7 @@ void Game::processMouseDown(const std::optional<sf::Event> t_event)
 {
 	const sf::Event::MouseButtonPressed* newMousePress = t_event->getIf<sf::Event::MouseButtonPressed>();
 
-	if (!m_aiming)
+	if (!m_aiming && !m_firing)
 	{
 		m_mouseEnd.x =  static_cast<float>( newMousePress->position.x);
 		m_mouseEnd.y = static_cast<float>(newMousePress->position.y);
@@ -143,7 +143,16 @@ void Game::procsesMouseRelease(const std::optional<sf::Event> t_event)
 {
 	const sf::Event::MouseButtonReleased* newMouseRelease = t_event->getIf<sf::Event::MouseButtonReleased>();
 
-	m_aiming = false;
+	if (m_aiming && !m_firing)
+	{
+		m_aiming = false;
+		m_firing = true;
+		m_mouseEnd.x = static_cast<float>(newMouseRelease->position.x);
+		m_mouseEnd.y = static_cast<float>(newMouseRelease->position.y);
+		m_ballVelocity = m_mouseEnd - m_canonEnd;
+		m_ballVelocity = m_ballVelocity / 50.0f;
+		m_aimLine.clear();
+	}
 }
 
 /// <summary>
@@ -169,6 +178,7 @@ void Game::update(sf::Time t_deltaTime)
 		m_window.close();
 	}
 	moveTarget();
+	moveBall();
 	animateGumba();
 }
 
@@ -224,6 +234,12 @@ void Game::moveTarget()
 	m_targetSprite.setPosition(m_targetLocation);
 
 
+}
+
+void Game::moveBall()
+{
+	m_ballLocation += m_ballVelocity;
+	m_ball.setPosition(m_ballLocation);
 }
 
 void Game::animateGumba()
@@ -307,7 +323,8 @@ void Game::setupSprites()
 
 	m_ball.setFillColor(sf::Color::Red);
 	m_ball.setRadius(10.0f);
-	m_ball.setPosition(sf::Vector2f{ 100.0f, 550.0f });
+	m_ballLocation = sf::Vector2f{ 100.0f, 550.0f };
+	m_ball.setPosition(m_ballLocation);
 	m_ball.setOrigin(sf::Vector2f{ 10.0f,10.0f });
 
 	if (!m_gumbaTexture.loadFromFile("assets/images/gumba.png"))
