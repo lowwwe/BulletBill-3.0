@@ -179,6 +179,7 @@ void Game::update(sf::Time t_deltaTime)
 	}
 	moveTarget();
 	moveBall();
+	checkGround();
 	animateGumba();
 }
 
@@ -207,6 +208,8 @@ void Game::render()
 	{
 		m_window.draw(m_aimLine);
 	}
+	m_window.draw(m_missMessage);
+	m_window.draw(m_hitMessage);
 	m_window.display();
 }
 
@@ -238,6 +241,10 @@ void Game::moveTarget()
 
 void Game::moveBall()
 {
+	if (m_firing)
+	{
+		m_ballVelocity += m_gravity;
+	}	
 	m_ballLocation += m_ballVelocity;
 	m_ball.setPosition(m_ballLocation);
 }
@@ -259,6 +266,21 @@ void Game::animateGumba()
 	{
 		m_gumbaFrame = frame;
 		m_targetSprite.setTextureRect(sf::IntRect{sf::Vector2i{FRAME_WIDTH*frame,0}, sf::Vector2i{FRAME_WIDTH,FRAME_HEIGHT}});
+	}
+
+}
+
+void Game::checkGround()
+{
+	if (m_ballLocation.x > 800.0f || m_ballLocation.x < 0.0f || m_ballLocation.y > 600.0f)
+	{
+		m_ballLocation = sf::Vector2f{100.0f, 550.0f};
+		m_ball.setPosition(m_ballLocation);
+		m_ballVelocity = sf::Vector2f{ 0.0f,0.0f };
+		m_misses++;
+		m_missMessage.setString("Misses : " + std::to_string(m_misses));
+
+		m_firing = false;
 	}
 
 }
@@ -291,14 +313,17 @@ void Game::setupTexts()
 	{
 		std::cout << "problem loading arial black font" << std::endl;
 	}
-	m_DELETEwelcomeMessage.setFont(m_jerseyFont);
-	m_DELETEwelcomeMessage.setString("SFML Game");
-	m_DELETEwelcomeMessage.setPosition(sf::Vector2f{ 205.0f, 240.0f });
-	m_DELETEwelcomeMessage.setCharacterSize(96U);
-	m_DELETEwelcomeMessage.setOutlineColor(sf::Color::Black);
-	m_DELETEwelcomeMessage.setFillColor(sf::Color::Red);
-	m_DELETEwelcomeMessage.setOutlineThickness(2.0f);
+	m_missMessage.setString("Misses: 0");
+	m_missMessage.setPosition(sf::Vector2f{ 40.0f,60.0f });
+	m_missMessage.setFillColor(sf::Color::Red);
+	m_missMessage.setCharacterSize(30U);
 
+	m_hitMessage.setString("Hits: 0");
+	m_hitMessage.setPosition(sf::Vector2f{ 40.0f,90.0f });
+	m_hitMessage.setFillColor(sf::Color::Green);
+	m_hitMessage.setCharacterSize(30U);
+
+	
 }
 
 /// <summary>

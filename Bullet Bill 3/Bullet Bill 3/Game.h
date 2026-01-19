@@ -43,6 +43,7 @@ private:
 	void moveTarget();
 	void moveBall();
 	void animateGumba();
+	void checkGround();
 
 
 	void setAimLine();
@@ -55,6 +56,12 @@ private:
 
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_jerseyFont;// font used by message
+	sf::Text m_missMessage{ m_jerseyFont };
+	sf::Text m_hitMessage{ m_jerseyFont };
+
+	int m_misses = 0; // number of misses
+	int m_hit = 0; // number of hits
+
 
 	sf::RectangleShape m_wall; // block for wall
 	sf::RectangleShape m_target;// simple target
@@ -64,9 +71,10 @@ private:
 	sf::CircleShape m_ball;// canon ball
 	sf::Vector2f m_ballLocation;// ball position
 	sf::Vector2f m_ballVelocity;// ball velocity
+	sf::Vector2f m_gravity{ 0.0f,0.06f }; // gravity force
 
 
-	sf::Text m_DELETEwelcomeMessage{ m_jerseyFont }; // text used for message on screen
+
 
 	sf::Texture m_gumbaTexture;// gumba texture
 	sf::Sprite m_targetSprite{ m_gumbaTexture };// gumba sprite
