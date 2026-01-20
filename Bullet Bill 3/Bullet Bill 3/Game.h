@@ -44,7 +44,7 @@ private:
 	void moveBall();
 	void animateGumba();
 	void checkGround();
-
+	bool checkCollisions(sf::CircleShape& t_ball, sf::RectangleShape& t_block, bool t_target);
 
 	void setAimLine();
 

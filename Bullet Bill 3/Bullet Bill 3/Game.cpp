@@ -178,9 +178,19 @@ void Game::update(sf::Time t_deltaTime)
 		m_window.close();
 	}
 	moveTarget();
-	moveBall();
-	checkGround();
+	
+	
 	animateGumba();
+	if (m_firing)
+	{
+		moveBall();
+		m_firing = checkCollisions(m_ball, m_target, true);
+	}
+	if (m_firing)
+	{
+		m_firing = checkCollisions(m_ball, m_wall, false);
+	}
+	checkGround();
 }
 
 /// <summary>
@@ -283,6 +293,33 @@ void Game::checkGround()
 		m_firing = false;
 	}
 
+}
+
+bool Game::checkCollisions(sf::CircleShape& t_ball, sf::RectangleShape& t_block, bool t_target)
+{
+	bool result = true;
+	sf::FloatRect projectile = t_ball.getGlobalBounds();
+	sf::FloatRect block = t_block.getGlobalBounds();
+
+	std::optional <sf::FloatRect> overlap = projectile.findIntersection(block);
+	if (overlap.has_value())
+	{
+		if (t_target)
+		{
+			m_hit++;
+			m_hitMessage.setString("Hits : " + std::to_string(m_hit));
+		}
+		else
+		{
+			m_misses++;
+			m_missMessage.setString("Misses : " + std::to_string(m_misses));
+		}
+		result = false;
+	}
+	
+	
+	
+	return result;
 }
 
 void Game::setAimLine()
