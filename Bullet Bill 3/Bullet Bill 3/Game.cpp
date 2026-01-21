@@ -110,6 +110,14 @@ void Game::processKeys(const std::optional<sf::Event> t_event)
 	{
 		m_graphics = !m_graphics;
 	}
+	if (sf::Keyboard::Key::Add == newKeypress->code)
+	{
+		adjustGravity(0.005f);
+	}
+	if (sf::Keyboard::Key::Subtract == newKeypress->code)
+	{
+		adjustGravity(-0.005f);
+	}
 }
 
 void Game::processMouseDown(const std::optional<sf::Event> t_event)
@@ -205,6 +213,7 @@ void Game::render()
 		m_window.draw(m_bgSprite);
 		m_window.draw(m_wallSprite);
 		m_window.draw(m_targetSprite);
+		m_window.draw(m_arrowSprite);
 	}
 	else
 	{
@@ -212,6 +221,7 @@ void Game::render()
 		m_window.draw(m_target);
 		m_window.draw(m_canon);
 		m_window.draw(m_ball);
+		m_window.draw(m_gravityBar);
 	}
 	
 	if (m_aiming)
@@ -341,6 +351,17 @@ void Game::setAimLine()
 	m_aimLine.append(point);
 }
 
+void Game::adjustGravity(float t_adjustment)
+{
+	float magnitude = 0.0f;
+	m_gravity.y += t_adjustment;
+
+	magnitude = m_gravity.y * 500.0f + 35.0f;
+	m_gravityBar.setSize(sf::Vector2f{ 20.0f, magnitude });
+	m_arrowSprite.setScale(sf::Vector2f{ 1.0f, magnitude / 60.0f });
+	
+}
+
 /// <summary>
 /// load the font and setup the text message for screen
 /// </summary>
@@ -411,6 +432,18 @@ void Game::setupSprites()
 	m_wallTexture.setRepeated(true);
 	m_wallSprite.setPosition(sf::Vector2f{ 400.0f,500.0f });
 	m_wallSprite.setTextureRect(sf::IntRect{sf::Vector2i{0,0},sf::Vector2i{32,100}});
+
+
+	m_gravityBar.setFillColor(sf::Color::Blue);
+	m_gravityBar.setPosition(sf::Vector2f{ 760.0f,40.0f });
+	m_gravityBar.setSize(sf::Vector2f{ 20.0f,60.0f });
+
+	if (!m_arrowTexture.loadFromFile("assets/images/arrow.png"))
+	{
+		std::cout << "problem with arrow";
+	}
+	m_arrowSprite.setTexture(m_arrowTexture, true);
+	m_arrowSprite.setPosition(m_gravityBar.getPosition());
 }
 
 /// <summary>

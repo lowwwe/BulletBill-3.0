@@ -47,6 +47,7 @@ private:
 	bool checkCollisions(sf::CircleShape& t_ball, sf::RectangleShape& t_block, bool t_target);
 
 	void setAimLine();
+	void adjustGravity(float t_adjustment);
 
 
 	void setupTexts();
@@ -98,6 +99,10 @@ private:
 	sf::SoundBuffer m_DELETEsoundBuffer; // buffer for beep sound
 	sf::Sound m_DELETEsound{ m_DELETEsoundBuffer }; // sound object to play
 	bool m_DELETEexitGame; // control exiting game
+
+	sf::RectangleShape m_gravityBar;// gravity indicator
+	sf::Texture m_arrowTexture;
+	sf::Sprite m_arrowSprite{ m_arrowTexture };
 
 
 	bool m_graphics{ false };
