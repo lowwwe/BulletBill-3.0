@@ -214,6 +214,8 @@ void Game::render()
 		m_window.draw(m_wallSprite);
 		m_window.draw(m_targetSprite);
 		m_window.draw(m_arrowSprite);
+		m_window.draw(m_barrelSprite);
+		m_window.draw(m_baseSprite);
 	}
 	else
 	{
@@ -341,6 +343,7 @@ void Game::setAimLine()
 	line = m_mouseEnd - m_canonEnd;
 	radians = std::atan2f(line.y, line.x);
 	m_canon.setRotation(sf::radians(radians + 1.57f));
+	m_barrelSprite.setRotation(sf::radians( radians + 1.57f));
 
 
 	point.color = sf::Color::Black;
@@ -453,6 +456,22 @@ void Game::setupSprites()
 	}
 	m_arrowSprite.setTexture(m_arrowTexture, true);
 	m_arrowSprite.setPosition(m_gravityBar.getPosition());
+
+	if (!m_barrelTexture.loadFromFile("assets/images/barrel.png"))
+	{
+		std::cout << "probelm with barrel";
+	}
+	m_barrelSprite.setTexture(m_barrelTexture, true);
+	m_barrelSprite.setOrigin(sf::Vector2f{ 22.0f,45.0f });
+	m_barrelSprite.setRotation(sf::degrees(45.0f));
+	m_barrelSprite.setPosition(sf::Vector2f{ 100.0f,550.0f });
+
+	if (!m_baseTexture.loadFromFile("assets/images/base.png"))
+	{
+		std::cout << "probelm with base";
+	}
+	m_baseSprite.setTexture(m_baseTexture,true);
+	m_baseSprite.setPosition(sf::Vector2f{ 70.0f,531.0f });
 }
 
 /// <summary>

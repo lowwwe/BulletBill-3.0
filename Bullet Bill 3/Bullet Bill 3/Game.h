@@ -75,7 +75,10 @@ private:
 	sf::Vector2f m_gravity{ 0.0f,0.06f }; // gravity force
 
 
-
+	sf::Texture m_barrelTexture;// texture for barrel
+	sf::Sprite m_barrelSprite{m_barrelTexture};// barrel sprite
+	sf::Texture m_baseTexture;// texture for base
+	sf::Sprite m_baseSprite{m_baseTexture};// sprite for base
 
 	sf::Texture m_gumbaTexture;// gumba texture
 	sf::Sprite m_targetSprite{ m_gumbaTexture };// gumba sprite
