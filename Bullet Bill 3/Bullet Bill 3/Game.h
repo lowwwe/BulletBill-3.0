@@ -40,6 +40,7 @@ private:
 	void update(sf::Time t_deltaTime);
 	void render();
 
+	void drawAimLine();
 	void moveTarget();
 	void moveBall();
 	void animateGumba();

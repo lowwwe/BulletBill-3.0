@@ -214,11 +214,16 @@ void Game::render()
 		m_window.draw(m_wallSprite);
 		m_window.draw(m_targetSprite);
 		m_window.draw(m_arrowSprite);
-		
+		m_window.draw(m_bulletSprite);
 		m_window.draw(m_barrelSprite);
 		
 		m_window.draw(m_baseSprite);
-		m_window.draw(m_bulletSprite);
+
+		if (m_aiming)
+		{
+			drawAimLine();
+		}
+		
 	}
 	else
 	{
@@ -227,15 +232,43 @@ void Game::render()
 		m_window.draw(m_canon);
 		m_window.draw(m_ball);
 		m_window.draw(m_gravityBar);
+		if (m_aiming)
+		{
+			m_window.draw(m_aimLine);
+		}
 	}
 	
-	if (m_aiming)
-	{
-		m_window.draw(m_aimLine);
-	}
+	
 	m_window.draw(m_missMessage);
 	m_window.draw(m_hitMessage);
 	m_window.display();
+}
+
+void Game::drawAimLine()
+{
+	sf::Vector2f velocity;// temp velocity == direction
+	sf::Vector2f location;// temp position
+	float angleR;  // angle in radians
+	sf::Color colour{ 255u,255u,255u,255u }; // white && trans
+
+	velocity = (m_mouseEnd - m_canonEnd) / 50.0f;
+	location = m_ballLocation;
+	for (int i = 0; i < 255; i++)
+	{
+		velocity += m_gravity;
+		location += velocity;
+		if (i % 20 == 10)
+		{
+			angleR = std::atan2(velocity.y, velocity.x);
+			m_bulletSprite.setRotation(sf::radians(angleR + 1.57f));
+			m_bulletSprite.setPosition(location);
+			colour.a = 255 - i;
+			m_bulletSprite.setColor(colour);
+			m_window.draw(m_bulletSprite);
+		}
+	}
+	m_bulletSprite.setPosition(m_ballLocation);
+	m_bulletSprite.setColor(sf::Color::White);
 }
 
 void Game::moveTarget()
