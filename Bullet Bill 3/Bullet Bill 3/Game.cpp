@@ -214,8 +214,11 @@ void Game::render()
 		m_window.draw(m_wallSprite);
 		m_window.draw(m_targetSprite);
 		m_window.draw(m_arrowSprite);
+		
 		m_window.draw(m_barrelSprite);
+		
 		m_window.draw(m_baseSprite);
+		m_window.draw(m_bulletSprite);
 	}
 	else
 	{
@@ -263,12 +266,18 @@ void Game::moveTarget()
 
 void Game::moveBall()
 {
+	float angle = 0.0f; // bullet angle in radians
 	if (m_firing)
 	{
 		m_ballVelocity += m_gravity;
 	}	
 	m_ballLocation += m_ballVelocity;
 	m_ball.setPosition(m_ballLocation);
+	m_bulletSprite.setPosition(m_ballLocation);
+	angle = std::atan2(m_ballVelocity.y, m_ballVelocity.x);
+	m_bulletSprite.setRotation(sf::radians(angle + 1.57f));
+
+
 }
 
 void Game::animateGumba()
@@ -472,6 +481,15 @@ void Game::setupSprites()
 	}
 	m_baseSprite.setTexture(m_baseTexture,true);
 	m_baseSprite.setPosition(sf::Vector2f{ 70.0f,531.0f });
+
+	if (!m_bulletTexture.loadFromFile("assets/images/bullet.png"))
+	{
+		std::cout << "problem wioth bullet";
+	}
+	m_bulletSprite.setTexture(m_bulletTexture, true);
+	m_bulletSprite.setOrigin(sf::Vector2f{ 20.0f,20.0f });
+	m_bulletSprite.setRotation(sf::degrees(45.0f));
+	m_bulletSprite.setPosition(sf::Vector2f{ 100.0f,550.0f });
 }
 
 /// <summary>

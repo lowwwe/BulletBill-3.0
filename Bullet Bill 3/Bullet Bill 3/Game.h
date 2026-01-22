@@ -107,6 +107,8 @@ private:
 	sf::Texture m_arrowTexture;
 	sf::Sprite m_arrowSprite{ m_arrowTexture };
 
+	sf::Texture m_bulletTexture;// texture for bullet
+	sf::Sprite m_bulletSprite{ m_bulletTexture };// sprite for bullet
 
 	bool m_graphics{ false };
 };
