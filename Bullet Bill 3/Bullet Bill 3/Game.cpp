@@ -262,7 +262,7 @@ void Game::drawAimLine()
 			angleR = std::atan2(velocity.y, velocity.x);
 			m_bulletSprite.setRotation(sf::radians(angleR + 1.57f));
 			m_bulletSprite.setPosition(location);
-			colour.a = 255 - i;
+			colour.a = static_cast<char>( 255 - i);
 			m_bulletSprite.setColor(colour);
 			m_window.draw(m_bulletSprite);
 		}
@@ -343,7 +343,7 @@ void Game::checkGround()
 		m_ballVelocity = sf::Vector2f{ 0.0f,0.0f };
 		m_misses++;
 		m_missMessage.setString("Misses : " + std::to_string(m_misses));
-
+		resetCanon();
 		m_firing = false;
 	}
 
@@ -362,11 +362,13 @@ bool Game::checkCollisions(sf::CircleShape& t_ball, sf::RectangleShape& t_block,
 		{
 			m_hit++;
 			m_hitMessage.setString("Hits : " + std::to_string(m_hit));
+			resetCanon();
 		}
 		else
 		{
 			m_misses++;
 			m_missMessage.setString("Misses : " + std::to_string(m_misses));
+			resetCanon();
 		}
 		result = false;
 	}
@@ -416,6 +418,15 @@ void Game::adjustGravity(float t_adjustment)
 	
 }
 
+void Game::resetCanon()
+{
+	m_ballLocation = sf::Vector2f{ 100.0f, 550.0f };
+	m_ball.setPosition(m_ballLocation);
+	m_bulletSprite.setRotation(sf::degrees(45.0f));
+	m_bulletSprite.setPosition(m_ballLocation);
+
+}
+
 /// <summary>
 /// load the font and setup the text message for screen
 /// </summary>
@@ -443,15 +454,22 @@ void Game::setupTexts()
 /// </summary>
 void Game::setupSprites()
 {
-	m_wall.setFillColor(sf::Color::Black);
-	m_wall.setSize(sf::Vector2f{ 32.0f,100.0f });
-	m_wall.setPosition(sf::Vector2f{ 400.0f, 500.0f });
+	setupCanon();
+	setupTarget();
+	setupGravity();
+	if (!m_bgTexure.loadFromFile("assets/images/background.jpg"))
+	{
+		std::cout << "problem with the backgrouind";
+	}
+	m_bgSprite.setTexture(m_bgTexure, true);
+	m_bgSprite.setPosition(sf::Vector2f{ 0.0f,0.0f });	
+}
 
-	m_target.setFillColor(sf::Color::Green);
-	m_target.setSize(sf::Vector2f{ 55.0f,55.0f });
-	m_targetLocation = sf::Vector2f{ 432.0f,545.0f };
-	m_target.setPosition(m_targetLocation);
-
+/// <summary>
+/// load assets used by canon and ball
+/// </summary>
+void Game::setupCanon()
+{
 	m_canon.setFillColor(sf::Color::Black);
 	m_canon.setSize(sf::Vector2f{ 20.0f,70.0f });
 	m_canon.setPosition(sf::Vector2f{ 100.0f,550.0f });
@@ -463,42 +481,6 @@ void Game::setupSprites()
 	m_ballLocation = sf::Vector2f{ 100.0f, 550.0f };
 	m_ball.setPosition(m_ballLocation);
 	m_ball.setOrigin(sf::Vector2f{ 10.0f,10.0f });
-
-	if (!m_gumbaTexture.loadFromFile("assets/images/gumba.png"))
-	{
-		std::cout << "problem with gumba" << std::endl;
-	}
-
-	m_targetSprite.setTexture(m_gumbaTexture,true);
-	m_targetSprite.setTextureRect(sf::IntRect{ sf::Vector2i{0,0}, sf::Vector2i{52,54} });
-
-	if (!m_bgTexure.loadFromFile("assets/images/background.jpg"))
-	{
-		std::cout << "problem with the backgrouind";
-	}
-	m_bgSprite.setTexture(m_bgTexure, true);
-	m_bgSprite.setPosition(sf::Vector2f{ 0.0f,0.0f });
-
-	if (!m_wallTexture.loadFromFile("assets/images/wall.jpg"))
-	{
-		std::cout << "problem with wall";
-	}
-	m_wallTexture.setRepeated(true);
-	m_wallSprite.setPosition(sf::Vector2f{ 400.0f,500.0f });
-	m_wallSprite.setTextureRect(sf::IntRect{sf::Vector2i{0,0},sf::Vector2i{32,100}});
-
-
-	m_gravityBar.setFillColor(sf::Color::Blue);
-	m_gravityBar.setPosition(sf::Vector2f{ 760.0f,40.0f });
-	m_gravityBar.setSize(sf::Vector2f{ 20.0f,60.0f });
-
-	if (!m_arrowTexture.loadFromFile("assets/images/arrow.png"))
-	{
-		std::cout << "problem with arrow";
-	}
-	m_arrowSprite.setTexture(m_arrowTexture, true);
-	m_arrowSprite.setPosition(m_gravityBar.getPosition());
-
 	if (!m_barrelTexture.loadFromFile("assets/images/barrel.png"))
 	{
 		std::cout << "probelm with barrel";
@@ -512,7 +494,7 @@ void Game::setupSprites()
 	{
 		std::cout << "probelm with base";
 	}
-	m_baseSprite.setTexture(m_baseTexture,true);
+	m_baseSprite.setTexture(m_baseTexture, true);
 	m_baseSprite.setPosition(sf::Vector2f{ 70.0f,531.0f });
 
 	if (!m_bulletTexture.loadFromFile("assets/images/bullet.png"))
@@ -523,6 +505,57 @@ void Game::setupSprites()
 	m_bulletSprite.setOrigin(sf::Vector2f{ 20.0f,20.0f });
 	m_bulletSprite.setRotation(sf::degrees(45.0f));
 	m_bulletSprite.setPosition(sf::Vector2f{ 100.0f,550.0f });
+}
+
+
+/// <summary>
+/// load assest used by gumba and wall
+/// </summary>
+void Game::setupTarget()
+{
+
+	m_wall.setFillColor(sf::Color::Black);
+	m_wall.setSize(sf::Vector2f{ 32.0f,100.0f });
+	m_wall.setPosition(sf::Vector2f{ 400.0f, 500.0f });
+
+	m_target.setFillColor(sf::Color::Green);
+	m_target.setSize(sf::Vector2f{ 55.0f,55.0f });
+	m_targetLocation = sf::Vector2f{ 432.0f,545.0f };
+	m_target.setPosition(m_targetLocation);
+
+	if (!m_gumbaTexture.loadFromFile("assets/images/gumba.png"))
+	{
+		std::cout << "problem with gumba" << std::endl;
+	}
+
+	m_targetSprite.setTexture(m_gumbaTexture, true);
+	m_targetSprite.setTextureRect(sf::IntRect{ sf::Vector2i{0,0}, sf::Vector2i{52,54} });
+
+	if (!m_wallTexture.loadFromFile("assets/images/wall.jpg"))
+	{
+		std::cout << "problem with wall";
+	}
+	m_wallTexture.setRepeated(true);
+	m_wallSprite.setPosition(sf::Vector2f{ 400.0f,500.0f });
+	m_wallSprite.setTextureRect(sf::IntRect{ sf::Vector2i{0,0},sf::Vector2i{32,100} });
+
+}
+
+/// <summary>
+/// asses used by gravity arrow
+/// </summary>
+void Game::setupGravity()
+{
+	m_gravityBar.setFillColor(sf::Color::Blue);
+	m_gravityBar.setPosition(sf::Vector2f{ 760.0f,40.0f });
+	m_gravityBar.setSize(sf::Vector2f{ 20.0f,60.0f });
+
+	if (!m_arrowTexture.loadFromFile("assets/images/arrow.png"))
+	{
+		std::cout << "problem with arrow";
+	}
+	m_arrowSprite.setTexture(m_arrowTexture, true);
+	m_arrowSprite.setPosition(m_gravityBar.getPosition());
 }
 
 /// <summary>

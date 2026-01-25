@@ -49,10 +49,13 @@ private:
 
 	void setAimLine();
 	void adjustGravity(float t_adjustment);
-
+	void resetCanon();
 
 	void setupTexts();
 	void setupSprites();
+	void setupCanon();
+	void setupTarget();
+	void setupGravity();
 	void setupAudio();
 
 
