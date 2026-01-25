@@ -56,7 +56,7 @@ private:
 	void setupCanon();
 	void setupTarget();
 	void setupGravity();
-	void setupAudio();
+	
 
 
 	sf::RenderWindow m_window; // main SFML window
@@ -70,7 +70,7 @@ private:
 
 	sf::RectangleShape m_wall; // block for wall
 	sf::RectangleShape m_target;// simple target
-	sf::RectangleShape m_canon;
+	sf::RectangleShape m_canon; // simple canon
 	sf::Vector2f m_targetLocation; // location of target
 	sf::Vector2f m_targetVelocity; // velocity of target
 	sf::CircleShape m_ball;// canon ball
@@ -86,35 +86,34 @@ private:
 
 	sf::Texture m_gumbaTexture;// gumba texture
 	sf::Sprite m_targetSprite{ m_gumbaTexture };// gumba sprite
-	int m_gumbaFrame{ 0 };
-	const int GUMBE_FRAMES = 19;
-	float m_gumbaFrameCount{ 0.0f };
-	float m_gumbaFrameIncrement{0.3f};
+	int m_gumbaFrame{ 0 }; // starting animation frame
+	const int GUMBE_FRAMES = 19; // number of frame in the sprite sheet for gumba
+	float m_gumbaFrameCount{ 0.0f }; // stating frtame counter varialve float
+	float m_gumbaFrameIncrement{0.3f}; // added each game frame to frame counter
 
-	sf::Texture m_bgTexure;
-	sf::Sprite m_bgSprite{ m_bgTexure };
-	sf::Texture m_wallTexture;
-	sf::Sprite m_wallSprite{ m_wallTexture };
+	sf::Texture m_bgTexure; // backgraound texture
+	sf::Sprite m_bgSprite{ m_bgTexure }; // spreit used to drawe background 
+	sf::Texture m_wallTexture; // txture for wall
+	sf::Sprite m_wallSprite{ m_wallTexture }; // sprite for wall to be repeated
 
-	sf::Vector2f m_mouseEnd;
-	sf::Vector2f m_canonEnd{ 100.0f,550.0f };
+	sf::Vector2f m_mouseEnd; // location of mouse click or move 
+	sf::Vector2f m_canonEnd{ 100.0f,550.0f }; // location of centre of canon wherre the ball is
 
-	sf::VertexArray m_aimLine{ sf::PrimitiveType::Lines };
+	sf::VertexArray m_aimLine{ sf::PrimitiveType::Lines }; // line fromcanon to mouse
 	bool m_aiming{ false }; // we are aiming
 	bool m_firing{ false };// we are firing
 
-	sf::SoundBuffer m_DELETEsoundBuffer; // buffer for beep sound
-	sf::Sound m_DELETEsound{ m_DELETEsoundBuffer }; // sound object to play
+
 	bool m_DELETEexitGame; // control exiting game
 
 	sf::RectangleShape m_gravityBar;// gravity indicator
-	sf::Texture m_arrowTexture;
-	sf::Sprite m_arrowSprite{ m_arrowTexture };
+	sf::Texture m_arrowTexture; // arrow to represent gravity value
+	sf::Sprite m_arrowSprite{ m_arrowTexture }; // sprite to draw arrow
 
 	sf::Texture m_bulletTexture;// texture for bullet
 	sf::Sprite m_bulletSprite{ m_bulletTexture };// sprite for bullet
 
-	bool m_graphics{ false };
+	bool m_graphics{ false }; // ture if in graphics mode else shapes
 };
 
 #pragma warning( pop ) 

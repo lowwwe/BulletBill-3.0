@@ -22,7 +22,6 @@ Game::Game() :
 {
 	setupTexts(); // load font 
 	setupSprites(); // load texture
-	setupAudio(); // load sounds
 	m_targetVelocity = sf::Vector2f{ -0.6f,0.0f };
 }
 
@@ -120,6 +119,11 @@ void Game::processKeys(const std::optional<sf::Event> t_event)
 	}
 }
 
+
+/// <summary>
+/// start aiming to the mouise location
+/// </summary>
+/// <param name="t_event">event for mouse click down</param>
 void Game::processMouseDown(const std::optional<sf::Event> t_event)
 {
 	const sf::Event::MouseButtonPressed* newMousePress = t_event->getIf<sf::Event::MouseButtonPressed>();
@@ -134,9 +138,13 @@ void Game::processMouseDown(const std::optional<sf::Event> t_event)
 
 }
 
+/// <summary>
+///  adjust aiming line basde on moving the mouse
+/// </summary>
+/// <param name="t_event">event for mouse move</param>
 void Game::processMouseMove(const std::optional<sf::Event> t_event)
 {
-	if (m_aiming)
+	if (m_aiming) // if not aiming do nothing
 	{
 		const sf::Event::MouseMoved* newMouseMove = t_event->getIf < sf::Event::MouseMoved>();
 
@@ -147,11 +155,16 @@ void Game::processMouseMove(const std::optional<sf::Event> t_event)
 
 }
 
+
+/// <summary>
+/// fire when  mouse relased
+/// </summary>
+/// <param name="t_event">event for mouse release</param>
 void Game::procsesMouseRelease(const std::optional<sf::Event> t_event)
 {
 	const sf::Event::MouseButtonReleased* newMouseRelease = t_event->getIf<sf::Event::MouseButtonReleased>();
 
-	if (m_aiming && !m_firing)
+	if (m_aiming && !m_firing) // can fire in bullet in flight or didn't aim
 	{
 		m_aiming = false;
 		m_firing = true;
@@ -185,9 +198,7 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		m_window.close();
 	}
-	moveTarget();
-	
-	
+	moveTarget();	
 	animateGumba();
 	if (m_firing)
 	{
@@ -203,6 +214,8 @@ void Game::update(sf::Time t_deltaTime)
 
 /// <summary>
 /// draw the frame and then switch buffers
+/// check if in grapohics mode or
+/// shape mode
 /// </summary>
 void Game::render()
 {
@@ -215,15 +228,12 @@ void Game::render()
 		m_window.draw(m_targetSprite);
 		m_window.draw(m_arrowSprite);
 		m_window.draw(m_bulletSprite);
-		m_window.draw(m_barrelSprite);
-		
+		m_window.draw(m_barrelSprite);		
 		m_window.draw(m_baseSprite);
-
 		if (m_aiming)
 		{
 			drawAimLine();
-		}
-		
+		}		
 	}
 	else
 	{
@@ -236,14 +246,18 @@ void Game::render()
 		{
 			m_window.draw(m_aimLine);
 		}
-	}
-	
-	
+	}	
 	m_window.draw(m_missMessage);
 	m_window.draw(m_hitMessage);
 	m_window.display();
 }
 
+/// <summary>
+/// get vector between cannon ansd mouse
+/// calculater 255 steps into future for buller
+/// draw one frame in 20 form dashed line??
+/// adjust transparency each frame
+/// </summary>
 void Game::drawAimLine()
 {
 	sf::Vector2f velocity;// temp velocity == direction
@@ -271,6 +285,11 @@ void Game::drawAimLine()
 	m_bulletSprite.setColor(sf::Color::White);
 }
 
+
+/// <summary>
+/// add velocity to location
+/// and flip when we reach the edge
+/// </summary>
 void Game::moveTarget()
 {
 	const float SPEED = 0.6f;
@@ -293,10 +312,14 @@ void Game::moveTarget()
 	m_targetLocation += m_targetVelocity;
 	m_target.setPosition(m_targetLocation);
 	m_targetSprite.setPosition(m_targetLocation);
-
-
 }
 
+
+/// <summary>
+///  adjust velocity by gravity
+/// add velocity to location
+/// set ablge for bullet
+/// </summary>
 void Game::moveBall()
 {
 	float angle = 0.0f; // bullet angle in radians
@@ -313,6 +336,9 @@ void Game::moveBall()
 
 }
 
+/// <summary>
+/// increment gumba frame based on counter reset over 20
+/// </summary>
 void Game::animateGumba()
 {
 	int frame = 0;
@@ -334,6 +360,10 @@ void Game::animateGumba()
 
 }
 
+
+/// <summary>
+/// stop bullet when off screen except top
+/// </summary>
 void Game::checkGround()
 {
 	if (m_ballLocation.x > 800.0f || m_ballLocation.x < 0.0f || m_ballLocation.y > 600.0f)
@@ -349,6 +379,14 @@ void Game::checkGround()
 
 }
 
+/// <summary>
+/// check intersection between circle and rextangle
+/// bool true if target, flase if wall
+/// </summary>
+/// <param name="t_ball">ball</param>
+/// <param name="t_block">wall  or Target</param>
+/// <param name="t_target">true if target</param>
+/// <returns></returns>
 bool Game::checkCollisions(sf::CircleShape& t_ball, sf::RectangleShape& t_block, bool t_target)
 {
 	bool result = true;
@@ -378,6 +416,12 @@ bool Game::checkCollisions(sf::CircleShape& t_ball, sf::RectangleShape& t_block,
 	return result;
 }
 
+
+/// <summary>
+/// add tow point to vertex array
+/// one for mouse one for canon
+/// rotate caon to match slope of line
+/// </summary>
 void Game::setAimLine()
 {
 	sf::Vertex point;
@@ -398,6 +442,12 @@ void Game::setAimLine()
 	m_aimLine.append(point);
 }
 
+
+/// <summary>
+/// incre or decrease gravity value
+/// and adjust visual repesentation
+/// </summary>
+/// <param name="t_adjustment">gravity adjustment</param>
 void Game::adjustGravity(float t_adjustment)
 {
 	float magnitude = 0.0f;
@@ -418,6 +468,10 @@ void Game::adjustGravity(float t_adjustment)
 	
 }
 
+
+/// <summary>
+/// put ball back in canon when hit or miss
+/// </summary>
 void Game::resetCanon()
 {
 	m_ballLocation = sf::Vector2f{ 100.0f, 550.0f };
@@ -558,14 +612,4 @@ void Game::setupGravity()
 	m_arrowSprite.setPosition(m_gravityBar.getPosition());
 }
 
-/// <summary>
-/// load sound file and assign buffers
-/// </summary>
-void Game::setupAudio()
-{
-	if (!m_DELETEsoundBuffer.loadFromFile("ASSETS\\AUDIO\\beep.wav"))
-	{
-		std::cout << "Error loading beep sound" << std::endl;
-	}
-	
-}
+
